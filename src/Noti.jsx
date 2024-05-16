@@ -3,10 +3,22 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import { onMessage } from "@firebase/messaging";
+import axios from "axios";
+import App from './App.jsx'
+const url = "http://localhost:3000/api/notifications/fcm";
 const Noti = () => {
     const handleFcm = async () => {
         const a = await getFirebaseToken()
         console.log(a)
+        const data = {
+          fcmToken: a, // Replace with your actual FCM data
+        };
+        await axios.post(url, data, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
     }
 
     useEffect(() => {
@@ -41,6 +53,7 @@ const Noti = () => {
           }
         );
       });
+      
       return () => {
         unsubscribe();
       };
@@ -48,8 +61,8 @@ const Noti = () => {
     return (
       <div>
         <ToastContainer />
-        hello noti
         <button onClick={handleFcm}>Get FCM token</button>
+        <App/>
       </div>
     );
 }

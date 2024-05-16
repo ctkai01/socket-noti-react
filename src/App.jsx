@@ -8,7 +8,7 @@ const a = 1
 const b = 3;
 const App = () => {
   const [messages, setMessages] = useState([])
-  const urlParams = new URLSearchParams(window.location.search);
+  // const urlParams = new URLSearchParams(window.location.search);
   // const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
 // let [searchParams, setSearchParams] = useSearchParams();
@@ -36,16 +36,16 @@ console.log(messages);
     if (inputMessage.trim() !== "") {
       const a = socket.emit("chat", {
         text: inputMessage,
-        from: urlParams.get("from"),
-        to: urlParams.get("to"),
+        from: localStorage.getItem("from"),
+        to: localStorage.getItem("to"),
       }); // Emit 'chat' event with message
       console.log(a)
       setMessages((prevMessages) => [
         ...prevMessages,
         {
           text: inputMessage,
-          from: urlParams.get("from"),
-          to: urlParams.get("from"),
+          from: localStorage.getItem("from"),
+          to: localStorage.getItem("to"),
         },
       ]);
       setInputMessage("");
@@ -54,7 +54,7 @@ console.log(messages);
 
   useEffect(() => {
     socket.emit("join", {
-      userID: urlParams.get("from"),
+      userID: localStorage.getItem("from"),
     });
   }, [])
   return (
@@ -62,7 +62,7 @@ console.log(messages);
       <div>
         {messages.map((message, index) => (
           <div style={{ 
-            textAlign: message.from === urlParams.get("from") ? "right": "left"
+            textAlign: message.from === localStorage.getItem("from") ? "right": "left"
           }} key={index}>{message.text}</div>
         ))}
       </div>
